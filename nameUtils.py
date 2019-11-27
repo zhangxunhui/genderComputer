@@ -109,7 +109,7 @@ greek_letters = {}
 def is_cyrillic(uchr):
     try: return cyrillic_letters[uchr]
     except KeyError:
-        return cyrillic_letters.setdefault(uchr, 'CYRILLIC' in unicodedata.name(uchr))
+        return cyrillic_letters.setdefault(uchr, 'CYRILLIC' in unicodedata.name(u''+uchr))
 
 '''Check whether a given string is written in Cyrillic'''
 def only_cyrillic_chars(unistr):
@@ -120,7 +120,7 @@ def only_cyrillic_chars(unistr):
 def is_greek(uchr):
     try: return greek_letters[uchr]
     except KeyError:
-        return greek_letters.setdefault(uchr, 'GREEK' in unicodedata.name(uchr))
+        return greek_letters.setdefault(uchr, 'GREEK' in unicodedata.name(u''+uchr))
 
 '''Check whether a given string is written in Greek'''
 def only_greek_chars(unistr):
