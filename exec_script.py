@@ -1,7 +1,7 @@
 from genderComputer import GenderComputer
 import os, warnings, sys, MySQLdb, logging
 
-logging.basicConfig(filename='log/exec_script.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 gc = GenderComputer('./nameLists')
@@ -62,7 +62,7 @@ for user in users:
         except Exception as e:
             # there are some special characters that cannot be regarded
             cur.execute("insert into gender_genderComputer (user_id, gender) values (%s, %s)", (id, None))
-    # logging.info("user %d: %s; %s - %s" % (id, name, location, gender))
+    logging.info("user %d: %s; %s - %s" % (id, name, location, gender))
     if id % 10000 == 0:
         db.commit()
 db.commit()
