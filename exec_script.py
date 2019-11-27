@@ -74,10 +74,10 @@ for user in users:
         try:
             gender = gc.resolveGender(name, location)
             cur.execute("insert into gender_genderComputer (user_id, gender) values (%s, %s)", (id, gender))
+            logging.info("user %d: %s; %s - %s" % (id, name, location, gender))
         except Exception as e:
             # there are some special characters that cannot be regarded
             cur.execute("insert into gender_genderComputer (user_id, gender) values (%s, %s)", (id, None))
-    logging.info("user %d: %s; %s - %s" % (id, name, location, gender))
     if id % 10000 == 0:
         db.commit()
 db.commit()
