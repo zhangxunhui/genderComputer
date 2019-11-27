@@ -36,6 +36,16 @@ cur = db.cursor()
 # create user_genders table
 create_table(cur, "gender_genderComputer")
 
+# read username from ghtorrent
+usernameDict = {}
+cur.execute("select login, name from users_private")
+items = cur.fetchall()
+for item in items:
+    login = item[0]
+    name = item[1]
+    usernameDict[login] = name
+logging.info("finish reading table users_private")
+
 # read users table from ghtorrent
 cur.execute("select max(user_id) from gender_genderComputer")
 max_user_id = cur.fetchone()
@@ -44,13 +54,18 @@ if max_user_id[0] is None:
 else:
     max_user_id = max_user_id[0]
 print max_user_id
-cur.execute("select id, name, location "
+cur.execute("select id, login, location "
             "from users "
             "where id > %s", (max_user_id,))
 users = cur.fetchall()
 for user in users:
     id = user[0]
-    name = user[1]
+    login = user[1]
+    if usernameDict.has_key(login) == False:
+        name = None
+    else:
+        name = usernameDict[login]
+
     if name is None or len(name.strip()) == 0:
         gender = None
         cur.execute("insert into gender_genderComputer (user_id, gender) values (%s, %s)", (id, None))
