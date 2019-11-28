@@ -30,6 +30,11 @@ db = MySQLdb.connect(host='localhost',
                 user='root',
                 passwd='111111',
                 db='ght_msr_2014',
+
+                local_infile=1,
+                use_unicode=True,
+                charset='utf8mb4',
+
                 autocommit=False)
 cur = db.cursor()
 
