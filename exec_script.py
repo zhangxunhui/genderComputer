@@ -46,6 +46,16 @@ for item in items:
     usernameDict[login] = name
 logging.info("finish reading table users_private")
 
+# read the country from ghtorrent
+countryDict = {}
+cur.execute("select user_id, country from country_countryNameManager")
+items = cur.fetchall()
+for item in items:
+    user_id = item[0]
+    country = item[1]
+    countryDict[user_id] = country
+logging.info("finish reading table country_countryNameManager")
+
 # read users table from ghtorrent
 cur.execute("select max(user_id) from gender_genderComputer")
 max_user_id = cur.fetchone()
@@ -54,7 +64,7 @@ if max_user_id[0] is None:
 else:
     max_user_id = max_user_id[0]
 print max_user_id
-cur.execute("select id, login, location "
+cur.execute("select id, login "
             "from users "
             "where id > %s", (max_user_id,))
 users = cur.fetchall()
@@ -70,7 +80,10 @@ for user in users:
         gender = None
         cur.execute("insert into gender_genderComputer (user_id, gender) values (%s, %s)", (id, None))
     else:
-        location = user[2]
+        if countryDict.has_key(id):
+            location = countryDict[id]
+        else:
+            location = None
         try:
             gender = gc.resolveGender(name, location)
             cur.execute("insert into gender_genderComputer (user_id, gender) values (%s, %s)", (id, gender))
